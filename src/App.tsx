@@ -5,6 +5,7 @@ function App() {
   const [summonerName, setSummonerName] = useState("");
   const [summonerData, setSummonerData] = useState(null);
   const [matches, setMatches] = useState([]);
+  const [specificMatch, setSpecificMatch] = useState(null);
   const [error, setError] = useState(null);
 
   const handleInputChange = (event) => {
@@ -22,18 +23,30 @@ function App() {
 
       const puuid = response.data.puuid;
 
-      console.log(puuid);
       const responseMatch = await axios.get(
         `http://localhost:3001/summonerMatch/${puuid}`
       );
 
+      const matchIds = responseMatch.data;
+
+      if (matchIds.length === 0) {
+        throw new Error("Brak meczów dla tego przywoływacza.");
+      }
+
+      const matchId = matchIds[0];
+
+      const specificMatchResponse = await axios.get(
+        `http://localhost:3001/specificMatch/${matchId}`
+      );
+
+      const specificMatchData = specificMatchResponse.data;
+      setSpecificMatch(specificMatchData);
+
       setSummonerData(response.data);
-      setMatches(responseMatch.data);
+      setMatches(matchIds);
       setError(null);
     } catch (error) {
       setError("Błąd pobierania danych przywoływacza: " + error.message);
-      setSummonerData(null);
-      setMatches([]);
     }
   };
 
@@ -63,6 +76,12 @@ function App() {
               <li key={match}>{match}</li>
             ))}
           </ul>
+        </div>
+      )}
+      {specificMatch && (
+        <div>
+          <h2>Dane meczu:</h2>
+          <pre>{JSON.stringify(specificMatch, null, 2)}</pre>
         </div>
       )}
     </div>
