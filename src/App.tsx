@@ -6,8 +6,7 @@ function App() {
   const [opponentName, setOpponentName] = useState("");
   const [summonerData, setSummonerData] = useState(null);
   const [opponentData, setOpponentData] = useState(null);
-  // const [summonerMatches, setSummonerMatches] = useState([]);
-  // const [opponentMatches, setOpponentMatches] = useState([]);
+  const [specificMatch, setSpecificMatch] = useState(null);
   const [commonMatches, setCommonMatches] = useState([]);
   const [error, setError] = useState(null);
 
@@ -60,10 +59,22 @@ function App() {
         opponentMatchesData.includes(match)
       );
 
+      if (commonMatches.length === 0) {
+        throw new Error("Brak wspólnych meczów dla obu przywoływaczy.");
+      }
+
+      const matchDetailsPromises = commonMatches.map(async (matchId) => {
+        const specificMatchResponse = await axios.get(
+          `http://localhost:3001/specificMatch/${matchId}`
+        );
+        return specificMatchResponse.data;
+      });
+
+      const matchDetails = await Promise.all(matchDetailsPromises);
+
+      setSpecificMatch(matchDetails);
       setSummonerData(summonerResponse.data);
       setOpponentData(opponentResponse.data);
-      // setSummonerMatches(summonerMatchesData);
-      // setOpponentMatches(opponentMatchesData);
       setCommonMatches(commonMatches);
       setError(null);
     } catch (error) {
@@ -101,17 +112,42 @@ function App() {
           <pre>{JSON.stringify(opponentData, null, 2)}</pre>
         </div>
       )}
+
       {commonMatches && commonMatches.length > 0 && (
         <div>
           <h2>Wspólne mecze</h2>
           <ul>
             {commonMatches.map((match) => (
-              <li key={match}>
-                {match}
-                {" - "}
-              </li>
+              <li key={match}>{match}</li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {specificMatch && (
+        <div>
+          <h2>Wspólne mecze:</h2>
+          {specificMatch.map((match, index) => (
+            <div key={index}>
+              <p>
+                <strong>Id meczu:</strong> {commonMatches[index]}
+              </p>
+              {match.info.participants.map((participant) => {
+                if (
+                  participant.puuid === summonerData.puuid ||
+                  participant.puuid === opponentData.puuid
+                ) {
+                  return (
+                    <p key={participant.participantId}>
+                      <strong>Rola:</strong> {participant.role},{" "}
+                      <strong>Postać:</strong> {participant.championName}
+                    </p>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          ))}
         </div>
       )}
     </div>
