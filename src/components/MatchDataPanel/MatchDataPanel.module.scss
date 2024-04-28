@@ -1,3 +1,16 @@
+.match-data-panel {
+  width: 100%;
+  background-color: #2d2d2d;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.player-name {
+  color: #fff;
+  padding: 10px;
+  margin: 5px;
+  background-color: #333;
+}
 .right-panel {
   background-color: #171717;
   width: 100vh;
@@ -31,6 +44,7 @@
   .scroll-container {
     flex-grow: 1;
     overflow-y: scroll;
+    overflow-x: hidden;
     padding: 20px;
     width: 80vh;
   }

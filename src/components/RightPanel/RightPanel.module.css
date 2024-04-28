@@ -7,8 +7,32 @@
   align-items: flex-start;
   padding: 100px 100px 100px 100px;
 }
+.right-panel .data-section {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.right-panel .data-field {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-right: 20px;
+}
+.right-panel .field-label {
+  color: #fff;
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+.right-panel .field-value {
+  color: #ccc;
+}
 .right-panel .scroll-container {
   flex-grow: 1;
   overflow-y: scroll;
   padding: 20px;
+  width: 80vh;
+}
+.right-panel .data-section {
+  display: flex;
 }/*# sourceMappingURL=RightPanel.module.css.map */
