@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import RightPanel from "./components/RightPanel/RightPanel";
+import LeftPanel from "./components/LeftPanel/LeftPanel";
 
 function App() {
   const [summonerName, setSummonerName] = useState("");
@@ -83,73 +85,21 @@ function App() {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        value={summonerName}
-        onChange={handleSummonerInputChange}
-        placeholder="Wprowadź nazwę użytkownika (Summoner)"
+    <div className="app-container">
+      <LeftPanel
+        summonerName={summonerName}
+        opponentName={opponentName}
+        handleSummonerInputChange={handleSummonerInputChange}
+        handleOpponentInputChange={handleOpponentInputChange}
+        fetchDataAndMatches={fetchDataAndMatches}
       />
-      <input
-        type="text"
-        value={opponentName}
-        onChange={handleOpponentInputChange}
-        placeholder="Wprowadź nazwę użytkownika (Przeciwnik)"
+      <RightPanel
+        error={error}
+        summonerData={summonerData}
+        opponentData={opponentData}
+        commonMatches={commonMatches}
+        specificMatch={specificMatch}
       />
-      <button onClick={fetchDataAndMatches}>
-        Pobierz dane i historię meczy
-      </button>
-      {error && <div>{error}</div>}
-      {summonerData && (
-        <div>
-          <h2>Dane użytkownika {summonerName}</h2>
-          <pre>{JSON.stringify(summonerData, null, 2)}</pre>
-        </div>
-      )}
-      {opponentData && (
-        <div>
-          <h2>Dane użytkownika {opponentName}</h2>
-          <pre>{JSON.stringify(opponentData, null, 2)}</pre>
-        </div>
-      )}
-
-      {commonMatches && commonMatches.length > 0 && (
-        <div>
-          <h2>Wspólne mecze</h2>
-          <ul>
-            {commonMatches.map((match) => (
-              <li key={match}>{match}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {specificMatch && (
-        <div>
-          <h2>Wspólne mecze:</h2>
-          {specificMatch.map((match, index) => (
-            <div key={index}>
-              <p>
-                <strong>Id meczu:</strong> {commonMatches[index]}
-              </p>
-              {match.info.participants.map((participant) => {
-                if (
-                  participant.puuid === summonerData.puuid ||
-                  participant.puuid === opponentData.puuid
-                ) {
-                  return (
-                    <p key={participant.participantId}>
-                      <strong>Rola:</strong> {participant.role},{" "}
-                      <strong>Postać:</strong> {participant.championName}
-                    </p>
-                  );
-                }
-                return null;
-              })}
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
