@@ -1,7 +1,14 @@
 .right-panel {
   background-color: #171717;
   width: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding: 100px 100px 100px 100px;
+}
+.right-panel .scroll-container {
+  flex-grow: 1;
+  overflow-y: scroll;
+  padding: 20px;
 }/*# sourceMappingURL=RightPanel.module.css.map */

@@ -1,1 +1,1 @@
-{"version":3,"sources":["RightPanel.module.scss","RightPanel.module.css"],"names":[],"mappings":"AAAA;EACE,yBAAA;EACA,YAAA;EACA,aAAA;EACA,sBAAA;EACA,uBAAA;ACCF","file":"RightPanel.module.css"}
+{"version":3,"sources":["RightPanel.module.scss","RightPanel.module.css"],"names":[],"mappings":"AAAA;EACE,yBAAA;EACA,YAAA;EACA,aAAA;EACA,aAAA;EACA,sBAAA;EACA,uBAAA;EACA,gCAAA;ACCF;ADAE;EACE,YAAA;EACA,kBAAA;EACA,aAAA;ACEJ","file":"RightPanel.module.css"}

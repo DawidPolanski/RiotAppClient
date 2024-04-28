@@ -10,19 +10,31 @@ function LeftPanel({
 }) {
   return (
     <div className={cls["left-panel"]}>
-      <input
-        type="text"
-        value={summonerName}
-        onChange={handleSummonerInputChange}
-        placeholder="Your nickname"
-      />
-      <input
-        type="text"
-        value={opponentName}
-        onChange={handleOpponentInputChange}
-        placeholder="Your teammate nickname"
-      />
-      <button onClick={fetchDataAndMatches}>Check</button>
+      <h1 className={cls["main-title"]}>Check your teammate</h1>
+      <div className={cls["input-container"]}>
+        <input
+          type="text"
+          value={summonerName}
+          onChange={handleSummonerInputChange}
+          placeholder="Enter your nickname"
+        />
+        <input
+          type="text"
+          value={opponentName}
+          onChange={handleOpponentInputChange}
+          placeholder="Enter your teammate's nickname"
+        />
+      </div>
+      <div className={cls["button-container"]}>
+        <button className={cls["button-primary"]} onClick={fetchDataAndMatches}>
+          Check
+          <img
+            src="./src/assets/icons/icon-search.svg"
+            alt="icon-search.svg"
+            className={cls["icon"]}
+          />
+        </button>
+      </div>
     </div>
   );
 }
