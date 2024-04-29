@@ -13,12 +13,14 @@ function LeftPanel({
       <h1 className={cls["main-title"]}>Check your teammate</h1>
       <div className={cls["input-container"]}>
         <input
+          className="summoner-input"
           type="text"
           value={summonerName}
           onChange={handleSummonerInputChange}
           placeholder="Enter your nickname"
         />
         <input
+          className="summoner-input"
           type="text"
           value={opponentName}
           onChange={handleOpponentInputChange}

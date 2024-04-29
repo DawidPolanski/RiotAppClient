@@ -1,5 +1,6 @@
 import React from "react";
 import cls from "./MatchDataPanel.module.scss";
+import championsIcons from "../../assets/image/champions-icons";
 
 const MatchDataPanel = ({
   error,
@@ -10,29 +11,6 @@ const MatchDataPanel = ({
 }) => {
   return (
     <div className={cls["match-data-panel"]}>
-      {error && <div className="error-message">{error}</div>}
-      {summonerData && (
-        <div className="card">
-          <h2>Dane użytkownika {summonerData.gameName}</h2>
-          <pre>{JSON.stringify(summonerData, null, 2)}</pre>
-        </div>
-      )}
-      {opponentData && (
-        <div className="card">
-          <h2>Dane użytkownika {opponentData.gameName}</h2>
-          <pre>{JSON.stringify(opponentData, null, 2)}</pre>
-        </div>
-      )}
-      {commonMatches && commonMatches.length > 0 && (
-        <div className="card match-details">
-          <h2>Wspólne mecze</h2>
-          <ul>
-            {commonMatches.map((match) => (
-              <li key={match}>{match}</li>
-            ))}
-          </ul>
-        </div>
-      )}
       {specificMatch &&
         specificMatch.map((match, index) => {
           const gameStartTimestamp = match.info.gameStartTimestamp;
@@ -46,39 +24,90 @@ const MatchDataPanel = ({
             match.info.queueId === 440
               ? "Rankingowa Elastyczna"
               : "Rankingowa Solo/Duo";
+          const opponentChampionName = match.info.participants
+            .filter(
+              (participant) =>
+                participant.summonerName === opponentData.gameName
+            )
+            .map((filteredParticipant) => filteredParticipant.championName);
+
+          const opponentChampionIcon = championsIcons[opponentChampionName];
+
+          const opponentKills = match.info.participants
+            .filter(
+              (participant) =>
+                participant.summonerName === opponentData.gameName
+            )
+            .reduce((total, participant) => total + participant.kills, 0);
+
+          const opponentDeaths = match.info.participants
+            .filter(
+              (participant) =>
+                participant.summonerName === opponentData.gameName
+            )
+            .reduce((total, participant) => total + participant.deaths, 0);
+
+          const opponentAssists = match.info.participants
+            .filter(
+              (participant) =>
+                participant.summonerName === opponentData.gameName
+            )
+            .reduce((total, participant) => total + participant.assists, 0);
+
+          const kdaStyle = {
+            color: "#36AE42",
+          };
+
+          const deathStyle = {
+            color: "#993636",
+          };
+
+          const assistStyle = {
+            color: "#A6A912",
+          };
 
           return (
             <div key={index} className={cls["specific-match"]}>
-              <div className="left">
+              <div className={cls["game-data"]}>
                 <p>
                   <strong>Days Ago:</strong> {daysAgo}
                 </p>
-                <p>
-                  <strong>Queue Type:</strong> {queueType}
-                </p>
+                <p>{queueType}</p>
               </div>
-              <div className="middle">
-                <p>
-                  <strong>Opponent Name:</strong> {opponentData.gameName}
-                </p>
-                <p>
-                  <strong>Champion Name:</strong>{" "}
-                  {match.info.participants
-                    .filter(
-                      (participant) =>
-                        participant.summonerName === opponentData.gameName
-                    )
-                    .map(
-                      (filteredParticipant) => filteredParticipant.championName
-                    )}
-                </p>
-              </div>
-              <div className="right">
-                <h3>All Players</h3>
-                {match.info.participants.map((participant) => (
-                  <p key={participant.participantId}>
-                    <strong>Summoner Name:</strong> {participant.summonerName}
+              <div className={cls["player-data"]}>
+                <div className={cls["opponent-info"]}>
+                  <div className={cls["opponent-champion"]}>
+                    <img
+                      className={cls["champion-icon"]}
+                      src={opponentChampionIcon}
+                      alt={opponentChampionName}
+                    />
+                  </div>
+
+                  <p>
+                    <span style={kdaStyle}>{opponentKills}</span>/
+                    <span style={deathStyle}>{opponentDeaths}</span>/
+                    <span style={assistStyle}>{opponentAssists}</span>
                   </p>
+                </div>
+              </div>
+
+              <div className={cls["players-list"]}>
+                {match.info.participants.map((participant) => (
+                  <div
+                    key={participant.participantId}
+                    className={cls["player"]}
+                  >
+                    <img
+                      src={championsIcons[participant.championName]}
+                      alt={participant.championName}
+                      width="30"
+                      height="30"
+                    />
+                    <span className={cls["summoner-name"]}>
+                      {participant.summonerName}
+                    </span>
+                  </div>
                 ))}
               </div>
             </div>
