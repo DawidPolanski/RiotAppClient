@@ -1,54 +1,62 @@
 .match-data-panel {
   width: 100%;
-  background-color: #2d2d2d;
   display: flex;
   flex-wrap: wrap;
-}
 
-.player-name {
-  color: #fff;
-  padding: 10px;
-  margin: 5px;
-  background-color: #333;
-}
-.right-panel {
-  background-color: #171717;
-  width: 100vh;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 100px 100px 100px 100px;
-  .data-section {
-    display: flex;
+  .specific-match {
+    background-color: #2d2d2d;
+    margin-top: 50px;
     width: 100%;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .data-field {
     display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    margin-right: 20px;
+    justify-content: space-between;
+  }
+
+  .left {
+    flex-basis: 25%;
+  }
+
+  .middle {
+    flex-basis: 50%;
+  }
+
+  .right {
+    flex-basis: 25%;
+  }
+
+  .card {
+    background-color: #2d2d2d;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   }
 
   .field-label {
     color: #fff;
-    font-size: 25px;
+    font-size: 16px;
     margin-bottom: 5px;
   }
 
   .field-value {
     color: #ccc;
+    font-size: 14px;
   }
-  .scroll-container {
-    flex-grow: 1;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    padding: 20px;
-    width: 80vh;
+
+  .error-message {
+    color: #ff0000;
+    font-size: 16px;
+    margin-bottom: 20px;
   }
-  .data-section {
-    display: flex;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 5px;
+    color: #ccc;
   }
 }

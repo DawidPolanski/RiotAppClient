@@ -1,4 +1,3 @@
-// RightPanel.jsx
 import React from "react";
 import cls from "./RightPanel.module.scss";
 import MatchDataPanel from "../MatchDataPanel/MatchDataPanel";
@@ -15,7 +14,7 @@ const RightPanel = ({
       <div className={cls["data-section"]}>
         <div className={cls["data-field"]}>
           <div className={cls["field-label"]}>Games</div>
-          <div className={cls["field-value"]}>{53}</div>
+          <div className={cls["field-value"]}>{commonMatches.length}</div>
         </div>
         <div className={cls["data-field"]}>
           <div className={cls["field-label"]}>Winrate against</div>
