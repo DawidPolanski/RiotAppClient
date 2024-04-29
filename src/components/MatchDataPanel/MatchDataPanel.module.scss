@@ -1,3 +1,6 @@
+$summoner-color: #e3cd08;
+$opponent-color: #36ae42;
+
 .match-data-panel {
   width: 100%;
   display: flex;
@@ -79,8 +82,12 @@
         margin-right: 8px;
       }
 
-      .summoner-name {
-        width: max-content;
+      .summoner-name-summoner {
+        color: $summoner-color;
+      }
+
+      .summoner-name-opponent {
+        color: $opponent-color;
       }
     }
   }

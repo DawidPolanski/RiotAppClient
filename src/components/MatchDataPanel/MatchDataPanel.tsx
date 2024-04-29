@@ -9,11 +9,41 @@ const MatchDataPanel = ({
   commonMatches,
   specificMatch,
 }) => {
+  const calculateGameDuration = (
+    gameStartTimestamp,
+    gameEndTimestamp,
+    gameDurationInSeconds
+  ) => {
+    let gameDurationFormatted;
+
+    if (gameEndTimestamp) {
+      const durationInSeconds = (gameEndTimestamp - gameStartTimestamp) / 1000;
+      const minutes = Math.floor(durationInSeconds / 60);
+      const seconds = Math.floor(durationInSeconds % 60);
+
+      gameDurationFormatted = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    } else {
+      const minutes = Math.floor(gameDurationInSeconds / 60);
+      const seconds = Math.floor(gameDurationInSeconds % 60);
+      gameDurationFormatted = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    }
+
+    return gameDurationFormatted;
+  };
+
   return (
     <div className={cls["match-data-panel"]}>
       {specificMatch &&
         specificMatch.map((match, index) => {
           const gameStartTimestamp = match.info.gameStartTimestamp;
+          const gameEndTimestamp = match.info.gameEndTimestamp;
+          const gameDurationInSeconds = match.info.gameDuration;
+          const gameDuration = calculateGameDuration(
+            gameStartTimestamp,
+            gameEndTimestamp,
+            gameDurationInSeconds
+          );
+
           const currentDate = new Date();
           const gameStartDate = new Date(gameStartTimestamp);
           const timeDifference =
@@ -66,6 +96,10 @@ const MatchDataPanel = ({
             color: "#A6A912",
           };
 
+          const playerResult = match.info.participants.find(
+            (participant) => participant.summonerName === summonerData.gameName
+          )?.win;
+
           return (
             <div key={index} className={cls["specific-match"]}>
               <div className={cls["game-data"]}>
@@ -73,6 +107,14 @@ const MatchDataPanel = ({
                   <strong>Days Ago:</strong> {daysAgo}
                 </p>
                 <p>{queueType}</p>
+                <p>
+                  <strong>Game Duration:</strong> {gameDuration}
+                </p>
+                {playerResult !== undefined && (
+                  <p>
+                    <strong>Result:</strong> {playerResult ? "WIN" : "LOSE"}
+                  </p>
+                )}
               </div>
               <div className={cls["player-data"]}>
                 <div className={cls["opponent-info"]}>
@@ -85,8 +127,9 @@ const MatchDataPanel = ({
                   </div>
 
                   <p>
-                    <span style={kdaStyle}>{opponentKills}</span>/
-                    <span style={deathStyle}>{opponentDeaths}</span>/
+                    <span style={kdaStyle}>{opponentKills}</span> &nbsp;/&nbsp;
+                    <span style={deathStyle}>{opponentDeaths}</span>
+                    &nbsp;/&nbsp;
                     <span style={assistStyle}>{opponentAssists}</span>
                   </p>
                 </div>
@@ -104,7 +147,15 @@ const MatchDataPanel = ({
                       width="30"
                       height="30"
                     />
-                    <span className={cls["summoner-name"]}>
+                    <span
+                      className={
+                        participant.summonerName === summonerData.gameName
+                          ? cls["summoner-name-summoner"]
+                          : participant.summonerName === opponentData.gameName
+                          ? cls["summoner-name-opponent"]
+                          : ""
+                      }
+                    >
                       {participant.summonerName}
                     </span>
                   </div>
