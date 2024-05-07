@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import RightPanel from "./components/RightPanel/RightPanel";
 import LeftPanel from "./components/LeftPanel/LeftPanel";
+import debounce from "lodash/debounce";
 
 function App() {
   const [summonerName, setSummonerName] = useState("");
@@ -20,7 +21,9 @@ function App() {
     setOpponentName(event.target.value);
   };
 
-  const fetchDataAndMatches = async () => {
+  const delayedFetchDataAndMatches = debounce(fetchDataAndMatches, 50);
+
+  async function fetchDataAndMatches() {
     try {
       const [summonerGameName, summonerTagLine] = summonerName.split("#");
       const [opponentGameName, opponentTagLine] = opponentName.split("#");
@@ -77,12 +80,15 @@ function App() {
       setSpecificMatch(matchDetails);
       setSummonerData(summonerResponse.data);
       setOpponentData(opponentResponse.data);
+      console.log(summonerResponse.data);
+      console.log(opponentResponse.data);
       setCommonMatches(commonMatches);
+      console.log(commonMatches[10]);
       setError(null);
     } catch (error) {
       setError("Błąd pobierania danych przywoływaczy: " + error.message);
     }
-  };
+  }
 
   return (
     <div className="app-container">
@@ -91,7 +97,7 @@ function App() {
         opponentName={opponentName}
         handleSummonerInputChange={handleSummonerInputChange}
         handleOpponentInputChange={handleOpponentInputChange}
-        fetchDataAndMatches={fetchDataAndMatches}
+        fetchDataAndMatches={delayedFetchDataAndMatches}
       />
       <RightPanel
         error={error}

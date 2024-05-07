@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import cls from "./MatchDataPanel.module.scss";
 import championsIcons from "../../assets/image/champions-icons";
 
@@ -8,7 +8,64 @@ const MatchDataPanel = ({
   opponentData,
   commonMatches,
   specificMatch,
+  onValueChange,
 }) => {
+  useEffect(() => {
+    if (specificMatch && summonerData && opponentData && commonMatches) {
+      let totalWinsForSummoner = 0;
+      let totalMatchesAgainstOpponent = [];
+      let totalMatchesWithOpponent = [];
+
+      specificMatch.forEach((match) => {
+        if (
+          match.info &&
+          match.info.participants &&
+          match.info.participants.length > 0
+        ) {
+          const player = match.info.participants.find(
+            (participant) => participant.summonerName === summonerData?.gameName
+          );
+          const opponent = match.info.participants.find(
+            (participant) => participant.summonerName === opponentData?.gameName
+          );
+
+          if (player && opponent) {
+            const summonerTeamId = player.teamId;
+            const opponentTeamId = opponent.teamId;
+            const playerResult = player.win;
+
+            if (summonerTeamId === opponentTeamId) {
+              totalMatchesWithOpponent.push(match.info.gameId);
+              if (playerResult) {
+                totalWinsForSummoner++;
+              }
+            } else {
+              totalMatchesAgainstOpponent.push(match);
+            }
+          }
+        }
+      });
+
+      const winsRatioWithOpponent =
+        totalMatchesWithOpponent.length > 0
+          ? (totalWinsForSummoner / totalMatchesWithOpponent.length) * 100
+          : 0;
+      const winsRatioAgainstOpponent =
+        commonMatches.length > 0
+          ? ((commonMatches.length - totalWinsForSummoner) /
+              commonMatches.length) *
+            100
+          : 0;
+
+      onValueChange(
+        winsRatioAgainstOpponent,
+        winsRatioWithOpponent,
+        totalMatchesWithOpponent.length,
+        totalMatchesAgainstOpponent.length
+      );
+    }
+  }, [specificMatch, summonerData, opponentData, commonMatches]);
+
   const calculateGameDuration = (
     gameStartTimestamp,
     gameEndTimestamp,
@@ -20,14 +77,12 @@ const MatchDataPanel = ({
       const durationInSeconds = (gameEndTimestamp - gameStartTimestamp) / 1000;
       const minutes = Math.floor(durationInSeconds / 60);
       const seconds = Math.floor(durationInSeconds % 60);
-
       gameDurationFormatted = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     } else {
       const minutes = Math.floor(gameDurationInSeconds / 60);
       const seconds = Math.floor(gameDurationInSeconds % 60);
       gameDurationFormatted = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     }
-
     return gameDurationFormatted;
   };
 
@@ -43,21 +98,17 @@ const MatchDataPanel = ({
             gameEndTimestamp,
             gameDurationInSeconds
           );
-
           const currentDate = new Date();
           const gameStartDate = new Date(gameStartTimestamp);
           const timeDifference =
             currentDate.getTime() - gameStartDate.getTime();
           const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-
           const queueType =
-            match.info.queueId === 440
-              ? "Rankingowa Elastyczna"
-              : "Rankingowa Solo/Duo";
+            match.info.queueId === 440 ? "Ranked Flex" : "Ranked Solo/Duo";
           const opponentChampionName = match.info.participants
             .filter(
               (participant) =>
-                participant.summonerName === opponentData.gameName
+                participant.summonerName === opponentData?.gameName
             )
             .map((filteredParticipant) => filteredParticipant.championName);
 
@@ -66,21 +117,21 @@ const MatchDataPanel = ({
           const opponentKills = match.info.participants
             .filter(
               (participant) =>
-                participant.summonerName === opponentData.gameName
+                participant.summonerName === opponentData?.gameName
             )
             .reduce((total, participant) => total + participant.kills, 0);
 
           const opponentDeaths = match.info.participants
             .filter(
               (participant) =>
-                participant.summonerName === opponentData.gameName
+                participant.summonerName === opponentData?.gameName
             )
             .reduce((total, participant) => total + participant.deaths, 0);
 
           const opponentAssists = match.info.participants
             .filter(
               (participant) =>
-                participant.summonerName === opponentData.gameName
+                participant.summonerName === opponentData?.gameName
             )
             .reduce((total, participant) => total + participant.assists, 0);
 
@@ -95,26 +146,34 @@ const MatchDataPanel = ({
           const assistStyle = {
             color: "#A6A912",
           };
+          const playerResult = match.info.participants.find((participant) => {
+            console.log("Participant summoner name:", participant.summonerName);
+            console.log("Summoner data game name:", summonerData?.gameName);
+            return (
+              participant.summonerName.toLowerCase() ===
+              summonerData?.gameName.toLowerCase()
+            );
+          })?.win;
 
-          const playerResult = match.info.participants.find(
-            (participant) => participant.summonerName === summonerData.gameName
-          )?.win;
-
+          console.log("playerResult", playerResult);
           return (
             <div key={index} className={cls["specific-match"]}>
               <div className={cls["game-data"]}>
-                <p>
-                  <strong>Days Ago:</strong> {daysAgo}
-                </p>
-                <p>{queueType}</p>
-                <p>
-                  <strong>Game Duration:</strong> {gameDuration}
+                <p className={cls["queue-type"]}>{queueType}</p>
+                <p className={cls["game-duration"]}>
+                  <strong> {daysAgo} Days ago</strong>
                 </p>
                 {playerResult !== undefined && (
-                  <p>
-                    <strong>Result:</strong> {playerResult ? "WIN" : "LOSE"}
+                  <p
+                    className={cls["win-result"]}
+                    style={{ color: playerResult ? "#36AE42" : "#993636" }}
+                  >
+                    {playerResult ? "YOU WIN" : "YOU LOSE"}
                   </p>
                 )}
+                <p className={cls["game-time"]}>
+                  <strong>Time:</strong> {gameDuration}
+                </p>
               </div>
               <div className={cls["player-data"]}>
                 <div className={cls["opponent-info"]}>
@@ -125,7 +184,6 @@ const MatchDataPanel = ({
                       alt={opponentChampionName}
                     />
                   </div>
-
                   <p>
                     <span style={kdaStyle}>{opponentKills}</span> &nbsp;/&nbsp;
                     <span style={deathStyle}>{opponentDeaths}</span>
@@ -134,7 +192,6 @@ const MatchDataPanel = ({
                   </p>
                 </div>
               </div>
-
               <div className={cls["players-list"]}>
                 {match.info.participants.map((participant) => (
                   <div
@@ -149,9 +206,9 @@ const MatchDataPanel = ({
                     />
                     <span
                       className={
-                        participant.summonerName === summonerData.gameName
+                        participant.summonerName === summonerData?.gameName
                           ? cls["summoner-name-summoner"]
-                          : participant.summonerName === opponentData.gameName
+                          : participant.summonerName === opponentData?.gameName
                           ? cls["summoner-name-opponent"]
                           : ""
                       }
