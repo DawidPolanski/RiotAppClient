@@ -47,10 +47,12 @@ const RightPanel = ({
           match.info.participants.length > 0
         ) {
           const player = match.info.participants.find(
-            (participant) => participant.summonerName === summonerData.gameName
+            (participant) =>
+              participant.riotIdGameName === summonerData.gameName
           );
           const opponent = match.info.participants.find(
-            (participant) => participant.summonerName === opponentData.gameName
+            (participant) =>
+              participant.riotIdGameName === opponentData.gameName
           );
 
           if (player && opponent) {
@@ -115,7 +117,6 @@ const RightPanel = ({
               : "-"}
           </div>
         </div>
-
         <div className={cls["data-field"]}>
           <div className={cls["field-label"]}>Wins with</div>
           <div className={cls["field-value"]}>
@@ -130,7 +131,6 @@ const RightPanel = ({
               : "-"}
           </div>
         </div>
-
         <div className={cls["data-field"]}>
           <div className={cls["field-label"]}>Rank</div>
           <div className={cls["field-value"]}>{33}</div>

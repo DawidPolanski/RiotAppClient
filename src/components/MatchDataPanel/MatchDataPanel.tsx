@@ -23,10 +23,12 @@ const MatchDataPanel = ({
           match.info.participants.length > 0
         ) {
           const player = match.info.participants.find(
-            (participant) => participant.summonerName === summonerData?.gameName
+            (participant) =>
+              participant.riotIdGameName === summonerData?.gameName
           );
           const opponent = match.info.participants.find(
-            (participant) => participant.summonerName === opponentData?.gameName
+            (participant) =>
+              participant.riotIdGameName === opponentData?.gameName
           );
 
           if (player && opponent) {
@@ -66,26 +68,6 @@ const MatchDataPanel = ({
     }
   }, [specificMatch, summonerData, opponentData, commonMatches]);
 
-  const calculateGameDuration = (
-    gameStartTimestamp,
-    gameEndTimestamp,
-    gameDurationInSeconds
-  ) => {
-    let gameDurationFormatted;
-
-    if (gameEndTimestamp) {
-      const durationInSeconds = (gameEndTimestamp - gameStartTimestamp) / 1000;
-      const minutes = Math.floor(durationInSeconds / 60);
-      const seconds = Math.floor(durationInSeconds % 60);
-      gameDurationFormatted = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-    } else {
-      const minutes = Math.floor(gameDurationInSeconds / 60);
-      const seconds = Math.floor(gameDurationInSeconds % 60);
-      gameDurationFormatted = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-    }
-    return gameDurationFormatted;
-  };
-
   return (
     <div className={cls["match-data-panel"]}>
       {specificMatch &&
@@ -108,7 +90,7 @@ const MatchDataPanel = ({
           const opponentChampionName = match.info.participants
             .filter(
               (participant) =>
-                participant.summonerName === opponentData?.gameName
+                participant.riotIdGameName === opponentData?.gameName
             )
             .map((filteredParticipant) => filteredParticipant.championName);
 
@@ -117,21 +99,21 @@ const MatchDataPanel = ({
           const opponentKills = match.info.participants
             .filter(
               (participant) =>
-                participant.summonerName === opponentData?.gameName
+                participant.riotIdGameName === opponentData?.gameName
             )
             .reduce((total, participant) => total + participant.kills, 0);
 
           const opponentDeaths = match.info.participants
             .filter(
               (participant) =>
-                participant.summonerName === opponentData?.gameName
+                participant.riotIdGameName === opponentData?.gameName
             )
             .reduce((total, participant) => total + participant.deaths, 0);
 
           const opponentAssists = match.info.participants
             .filter(
               (participant) =>
-                participant.summonerName === opponentData?.gameName
+                participant.riotIdGameName === opponentData?.gameName
             )
             .reduce((total, participant) => total + participant.assists, 0);
 
@@ -147,15 +129,9 @@ const MatchDataPanel = ({
             color: "#A6A912",
           };
           const playerResult = match.info.participants.find((participant) => {
-            console.log("Participant summoner name:", participant.summonerName);
-            console.log("Summoner data game name:", summonerData?.gameName);
-            return (
-              participant.summonerName.toLowerCase() ===
-              summonerData?.gameName.toLowerCase()
-            );
+            return participant.riotIdGameName === summonerData?.gameName;
           })?.win;
 
-          console.log("playerResult", playerResult);
           return (
             <div key={index} className={cls["specific-match"]}>
               <div className={cls["game-data"]}>
@@ -206,14 +182,19 @@ const MatchDataPanel = ({
                     />
                     <span
                       className={
-                        participant.summonerName === summonerData?.gameName
+                        participant.riotIdGameName === summonerData?.gameName
                           ? cls["summoner-name-summoner"]
-                          : participant.summonerName === opponentData?.gameName
+                          : participant.riotIdGameName ===
+                            opponentData?.gameName
                           ? cls["summoner-name-opponent"]
                           : ""
                       }
                     >
-                      {participant.summonerName}
+                      {participant.riotIdGameName === summonerData?.gameName
+                        ? summonerData?.gameName
+                        : participant.riotIdGameName === opponentData?.gameName
+                        ? opponentData?.gameName
+                        : participant.riotIdGameName}
                     </span>
                   </div>
                 ))}
@@ -223,6 +204,26 @@ const MatchDataPanel = ({
         })}
     </div>
   );
+};
+
+const calculateGameDuration = (
+  gameStartTimestamp,
+  gameEndTimestamp,
+  gameDurationInSeconds
+) => {
+  let gameDurationFormatted;
+
+  if (gameEndTimestamp) {
+    const durationInSeconds = (gameEndTimestamp - gameStartTimestamp) / 1000;
+    const minutes = Math.floor(durationInSeconds / 60);
+    const seconds = Math.floor(durationInSeconds % 60);
+    gameDurationFormatted = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  } else {
+    const minutes = Math.floor(gameDurationInSeconds / 60);
+    const seconds = Math.floor(gameDurationInSeconds % 60);
+    gameDurationFormatted = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  }
+  return gameDurationFormatted;
 };
 
 export default MatchDataPanel;

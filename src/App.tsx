@@ -31,59 +31,16 @@ function App() {
       const encodedSummonerTagLine = encodeURIComponent(summonerTagLine);
       const encodedOpponentTagLine = encodeURIComponent(opponentTagLine);
 
-      const summonerResponse = await axios.get(
-        `http://localhost:3001/summonerData/${summonerGameName}/${encodedSummonerTagLine}`
+      const response = await axios.get(
+        `http://localhost:3001/summonerAndMatchData/${summonerGameName}/${encodedSummonerTagLine}/${opponentGameName}/${encodedOpponentTagLine}`
       );
 
-      const opponentResponse = await axios.get(
-        `http://localhost:3001/summonerData/${opponentGameName}/${encodedOpponentTagLine}`
-      );
+      const responseData = response.data;
 
-      const summonerPuuid = summonerResponse.data.puuid;
-      const opponentPuuid = opponentResponse.data.puuid;
-
-      const summonerMatchResponse = await axios.get(
-        `http://localhost:3001/summonerMatch/${summonerPuuid}`
-      );
-
-      const opponentMatchResponse = await axios.get(
-        `http://localhost:3001/summonerMatch/${opponentPuuid}`
-      );
-
-      const summonerMatchesData = summonerMatchResponse.data;
-      const opponentMatchesData = opponentMatchResponse.data;
-
-      if (
-        summonerMatchesData.length === 0 ||
-        opponentMatchesData.length === 0
-      ) {
-        throw new Error("Brak meczów dla któregoś z przywoływaczy.");
-      }
-
-      const commonMatches = summonerMatchesData.filter((match) =>
-        opponentMatchesData.includes(match)
-      );
-
-      if (commonMatches.length === 0) {
-        throw new Error("Brak wspólnych meczów dla obu przywoływaczy.");
-      }
-
-      const matchDetailsPromises = commonMatches.map(async (matchId) => {
-        const specificMatchResponse = await axios.get(
-          `http://localhost:3001/specificMatch/${matchId}`
-        );
-        return specificMatchResponse.data;
-      });
-
-      const matchDetails = await Promise.all(matchDetailsPromises);
-
-      setSpecificMatch(matchDetails);
-      setSummonerData(summonerResponse.data);
-      setOpponentData(opponentResponse.data);
-      console.log(summonerResponse.data);
-      console.log(opponentResponse.data);
-      setCommonMatches(commonMatches);
-      console.log(commonMatches[10]);
+      setSummonerData(responseData.summonerData);
+      setOpponentData(responseData.opponentData);
+      setSpecificMatch(responseData.specificMatch);
+      setCommonMatches(responseData.commonMatches);
       setError(null);
     } catch (error) {
       setError("Błąd pobierania danych przywoływaczy: " + error.message);
