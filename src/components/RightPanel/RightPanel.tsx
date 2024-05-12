@@ -8,6 +8,7 @@ const RightPanel = ({
   opponentData,
   commonMatches,
   specificMatch,
+  opponentLeagueData,
 }) => {
   const [winsRatioAgainstOpponent, setWinsRatioAgainstOpponent] = useState<
     number | null
@@ -74,7 +75,7 @@ const RightPanel = ({
           }
         }
       });
-
+      console.log("opponentLeagueData", opponentLeagueData);
       const winsRatioAgainstOpponent =
         totalMatchesAgainstOpponent > 0
           ? (totalWinsForSummoner / totalMatchesAgainstOpponent) * 100
@@ -132,8 +133,36 @@ const RightPanel = ({
           </div>
         </div>
         <div className={cls["data-field"]}>
-          <div className={cls["field-label"]}>Rank</div>
-          <div className={cls["field-value"]}>{33}</div>
+          <div className={cls["field-label"]}>Rank solo/duo</div>
+          <div className={cls["field-value"]}>
+            {opponentLeagueData && opponentLeagueData.length > 0
+              ? opponentLeagueData
+                  .filter((league) => league.queueType === "RANKED_SOLO_5x5")
+                  .map((league, index) => (
+                    <span key={index}>
+                      {league.tier} {league.rank}
+                      {index !== opponentLeagueData.length - 1 && " "}
+                      {league.leaguePoints} LP
+                    </span>
+                  ))
+              : "-"}
+          </div>
+        </div>
+        <div className={cls["data-field"]}>
+          <div className={cls["field-label"]}>Rank flex</div>
+          <div className={cls["field-value"]}>
+            {opponentLeagueData && opponentLeagueData.length > 0
+              ? opponentLeagueData
+                  .filter((league) => league.queueType !== "RANKED_SOLO_5x5")
+                  .map((league, index) => (
+                    <span key={index}>
+                      {league.tier} {league.rank}
+                      {index !== opponentLeagueData.length - 1 && " "}
+                      {league.leaguePoints} LP
+                    </span>
+                  ))
+              : "-"}
+          </div>
         </div>
       </div>
       <div className={cls["scroll-container"]}>

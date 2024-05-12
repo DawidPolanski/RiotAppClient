@@ -54,6 +54,10 @@ $opponent-color: #36ae42;
   .game-data {
     flex-basis: 25%;
     max-width: 380px;
+    display: grid;
+    padding-left: 1rem;
+    align-items: center;
+    align-items: center;
   }
 
   .player-data {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import RightPanel from "./components/RightPanel/RightPanel";
 import LeftPanel from "./components/LeftPanel/LeftPanel";
@@ -12,6 +12,7 @@ function App() {
   const [specificMatch, setSpecificMatch] = useState(null);
   const [commonMatches, setCommonMatches] = useState([]);
   const [error, setError] = useState(null);
+  const [opponentLeagueData, setOpponentLeagueData] = useState(null);
 
   const handleSummonerInputChange = (event) => {
     setSummonerName(event.target.value);
@@ -41,12 +42,14 @@ function App() {
       setOpponentData(responseData.opponentData);
       setSpecificMatch(responseData.specificMatch);
       setCommonMatches(responseData.commonMatches);
+      setOpponentLeagueData(responseData.opponentLeagueData);
       setError(null);
     } catch (error) {
       setError("Błąd pobierania danych przywoływaczy: " + error.message);
     }
   }
 
+  console.log("opponentLeagueData", opponentLeagueData);
   return (
     <div className="app-container">
       <LeftPanel
@@ -62,6 +65,7 @@ function App() {
         opponentData={opponentData}
         commonMatches={commonMatches}
         specificMatch={specificMatch}
+        opponentLeagueData={opponentLeagueData}
       />
     </div>
   );
