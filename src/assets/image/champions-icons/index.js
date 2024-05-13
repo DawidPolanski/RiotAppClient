@@ -102,7 +102,7 @@ import Rakan from "./Rakan.svg";
 import Rammus from "./Rammus.svg";
 import Reksai from "./Reksai.svg";
 import Rell from "./Rell.svg";
-import RenataGlasc from "./RenataGlasc.svg";
+import Renata from "./Renata.svg";
 import Renekton from "./Renekton.svg";
 import Rengar from "./Rengar.svg";
 import Riven from "./Riven.svg";
@@ -271,7 +271,7 @@ const championsIcons = {
   Rammus,
   Reksai,
   Rell,
-  RenataGlasc,
+  Renata,
   Renekton,
   Rengar,
   Riven,

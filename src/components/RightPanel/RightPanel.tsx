@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import cls from "./RightPanel.module.scss";
 import MatchDataPanel from "../MatchDataPanel/MatchDataPanel";
+import divisionLol from "../../assets/image/division_lol";
 
 const RightPanel = ({
   error,
@@ -139,11 +140,19 @@ const RightPanel = ({
               ? opponentLeagueData
                   .filter((league) => league.queueType === "RANKED_SOLO_5x5")
                   .map((league, index) => (
-                    <span key={index}>
-                      {league.tier} {league.rank}
+                    <div key={index} className={cls["tier-info"]}>
+                      <img
+                        className={cls["tier-icon"]}
+                        src={divisionLol[league.tier]}
+                        alt={league.tier}
+                      />
+                      <div>
+                        <div>
+                          {league.tier} {league.rank} {league.leaguePoints} LP
+                        </div>
+                      </div>
                       {index !== opponentLeagueData.length - 1 && " "}
-                      {league.leaguePoints} LP
-                    </span>
+                    </div>
                   ))
               : "-"}
           </div>
@@ -155,11 +164,19 @@ const RightPanel = ({
               ? opponentLeagueData
                   .filter((league) => league.queueType !== "RANKED_SOLO_5x5")
                   .map((league, index) => (
-                    <span key={index}>
-                      {league.tier} {league.rank}
+                    <div key={index} className={cls["tier-info"]}>
+                      <img
+                        className={cls["tier-icon"]}
+                        src={divisionLol[league.tier]}
+                        alt={league.tier}
+                      />
+                      <div>
+                        <div>
+                          {league.tier} {league.rank} {league.leaguePoints} LP
+                        </div>
+                      </div>
                       {index !== opponentLeagueData.length - 1 && " "}
-                      {league.leaguePoints} LP
-                    </span>
+                    </div>
                   ))
               : "-"}
           </div>

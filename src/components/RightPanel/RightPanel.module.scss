@@ -5,19 +5,25 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 100px 100px 100px 100px;
+  padding: 100px;
 
   .data-section {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    margin-bottom: 20px;
   }
+
   .data-field {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     margin-right: 20px;
+    align-items: center;
+  }
+
+  .tier-icon {
+    width: 150px;
+    height: 150px;
   }
 
   .field-label {
@@ -25,16 +31,33 @@
     font-size: 25px;
     margin-bottom: 5px;
   }
+  .tier-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .tier-content img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 5px;
+  }
+  .tier-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   .field-value {
     color: #ccc;
+  }
+  .tier-info img {
+    width: 130px;
+    height: 130px;
   }
   .scroll-container {
     flex-grow: 1;
     overflow-y: auto;
     padding: 20px;
-    width: 80vh;
-  }
-  .data-section {
-    display: flex;
+    width: 85vh;
   }
 }
