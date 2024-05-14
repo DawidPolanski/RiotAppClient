@@ -19,7 +19,7 @@ import Briar from "./Briar.svg";
 import Caitlyn from "./Caitlyn.svg";
 import Camille from "./Camille.svg";
 import Cassiopeia from "./Cassiopeia.svg";
-import ChoGath from "./ChoGath.svg";
+import Chogath from "./Chogath.svg";
 import Corki from "./Corki.svg";
 import Darius from "./Darius.svg";
 import Diana from "./Diana.svg";
@@ -188,7 +188,7 @@ const championsIcons = {
   Caitlyn,
   Camille,
   Cassiopeia,
-  ChoGath,
+  Chogath,
   Corki,
   Darius,
   Diana,

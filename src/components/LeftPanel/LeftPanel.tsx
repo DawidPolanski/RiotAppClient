@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import cls from "./LeftPanel.module.scss";
 
 function LeftPanel({
@@ -8,6 +8,18 @@ function LeftPanel({
   handleOpponentInputChange,
   fetchDataAndMatches,
 }) {
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
+
+  const handleClick = () => {
+    if (!isButtonDisabled) {
+      setButtonDisabled(true);
+      fetchDataAndMatches();
+      setTimeout(() => {
+        setButtonDisabled(false);
+      }, 2000);
+    }
+  };
+
   return (
     <div className={cls["left-panel"]}>
       <h1 className={cls["main-title"]}>Check your teammate</h1>
@@ -28,7 +40,11 @@ function LeftPanel({
         />
       </div>
       <div className={cls["button-container"]}>
-        <button className={cls["button-primary"]} onClick={fetchDataAndMatches}>
+        <button
+          className={cls["button-primary"]}
+          onClick={handleClick}
+          disabled={isButtonDisabled}
+        >
           Check
           <img
             src="./src/assets/icons/icon-search.svg"

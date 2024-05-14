@@ -13,6 +13,7 @@ function App() {
   const [commonMatches, setCommonMatches] = useState([]);
   const [error, setError] = useState(null);
   const [opponentLeagueData, setOpponentLeagueData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSummonerInputChange = (event) => {
     setSummonerName(event.target.value);
@@ -26,6 +27,7 @@ function App() {
 
   async function fetchDataAndMatches() {
     try {
+      setLoading(true);
       const [summonerGameName, summonerTagLine] = summonerName.split("#");
       const [opponentGameName, opponentTagLine] = opponentName.split("#");
 
@@ -46,12 +48,14 @@ function App() {
       setError(null);
     } catch (error) {
       setError("Błąd pobierania danych przywoływaczy: " + error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
-  console.log("opponentLeagueData", opponentLeagueData);
   return (
     <div className="app-container">
+      {loading && <div className="overlay"></div>}
       <LeftPanel
         summonerName={summonerName}
         opponentName={opponentName}
@@ -59,14 +63,18 @@ function App() {
         handleOpponentInputChange={handleOpponentInputChange}
         fetchDataAndMatches={delayedFetchDataAndMatches}
       />
-      <RightPanel
-        error={error}
-        summonerData={summonerData}
-        opponentData={opponentData}
-        commonMatches={commonMatches}
-        specificMatch={specificMatch}
-        opponentLeagueData={opponentLeagueData}
-      />
+      {loading ? (
+        <div className="loading-spinner"></div>
+      ) : (
+        <RightPanel
+          error={error}
+          summonerData={summonerData}
+          opponentData={opponentData}
+          commonMatches={commonMatches}
+          specificMatch={specificMatch}
+          opponentLeagueData={opponentLeagueData}
+        />
+      )}
     </div>
   );
 }
