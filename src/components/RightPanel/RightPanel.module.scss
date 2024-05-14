@@ -1,6 +1,6 @@
 .right-panel {
   background-color: #171717;
-  width: 100vh;
+  width: calc(100% - 100vh);
   height: 100vh;
   display: flex;
   flex-direction: column;
