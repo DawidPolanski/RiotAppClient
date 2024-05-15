@@ -10,6 +10,7 @@ const RightPanel = ({
   commonMatches,
   specificMatch,
   opponentLeagueData,
+  onClosePanel,
 }) => {
   const [winsRatioAgainstOpponent, setWinsRatioAgainstOpponent] = useState<
     number | null
@@ -56,7 +57,6 @@ const RightPanel = ({
             (participant) =>
               participant.riotIdGameName === opponentData.gameName
           );
-
           if (player && opponent) {
             const summonerTeamId = player.teamId;
             const opponentTeamId = opponent.teamId;
@@ -96,8 +96,16 @@ const RightPanel = ({
     }
   }, [specificMatch, commonMatches, summonerData, opponentData]);
 
+  const handleClosePanel = () => {
+    if (onClosePanel) {
+      onClosePanel();
+    }
+  };
   return (
-    <div className={cls["right-panel"]}>
+    <div className={`${cls["right-panel"]} right-panel`}>
+      <button className={cls["close-button"]} onClick={handleClosePanel}>
+        Close
+      </button>
       <div className={cls["data-section"]}>
         <div className={cls["data-field"]}>
           <div className={cls["field-label"]}>Games</div>

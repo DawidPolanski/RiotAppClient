@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import RightPanel from "./components/RightPanel/RightPanel";
 import LeftPanel from "./components/LeftPanel/LeftPanel";
@@ -14,11 +14,14 @@ function App() {
   const [error, setError] = useState(null);
   const [opponentLeagueData, setOpponentLeagueData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showRightPanel, setShowRightPanel] = useState(false);
 
   const handleSummonerInputChange = (event) => {
     setSummonerName(event.target.value);
   };
-
+  const handleClosePanel = () => {
+    setShowRightPanel(false);
+  };
   const handleOpponentInputChange = (event) => {
     setOpponentName(event.target.value);
   };
@@ -46,6 +49,7 @@ function App() {
       setCommonMatches(responseData.commonMatches);
       setOpponentLeagueData(responseData.opponentLeagueData);
       setError(null);
+      setShowRightPanel(true);
     } catch (error) {
       setError("Błąd pobierania danych przywoływaczy: " + error.message);
     } finally {
@@ -54,7 +58,9 @@ function App() {
   }
 
   return (
-    <div className="app-container">
+    <div
+      className={`app-container ${showRightPanel ? "show-right-panel" : ""}`}
+    >
       {loading && <div className="overlay"></div>}
       <LeftPanel
         summonerName={summonerName}
@@ -73,6 +79,7 @@ function App() {
           commonMatches={commonMatches}
           specificMatch={specificMatch}
           opponentLeagueData={opponentLeagueData}
+          onClosePanel={handleClosePanel}
         />
       )}
     </div>

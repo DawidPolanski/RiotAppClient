@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import cls from "./MatchDataPanel.module.scss";
 import championsIcons from "../../assets/image/champions-icons";
+import { queueDescriptions } from "../../shared/queueDescriptions";
 
 const MatchDataPanel = ({
   error,
@@ -86,13 +87,13 @@ const MatchDataPanel = ({
             currentDate.getTime() - gameStartDate.getTime();
           const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
           const queueType =
-            match.info.queueId === 440 ? "Ranked Flex" : "Ranked Solo/Duo";
+            queueDescriptions[match.info.queueId] || "Unknown Queue";
           const opponentChampionName = match.info.participants
             .filter(
               (participant) =>
                 participant.riotIdGameName === opponentData?.gameName
             )
-            .map((filteredParticipant) => filteredParticipant.championName);
+            .map((filteredParticipant) => filteredParticipant.championName)[0];
 
           const opponentChampionIcon = championsIcons[opponentChampionName];
 

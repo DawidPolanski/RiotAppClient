@@ -11,7 +11,7 @@ import Ashe from "./Ashe.svg";
 import AurelionSol from "./Aurelion Sol.svg";
 import Azir from "./Azir.svg";
 import Bard from "./Bard.svg";
-import BelVeth from "./BelVeth.svg";
+import Belveth from "./Belveth.svg";
 import Blitzcrank from "./Blitzcrank.svg";
 import Brand from "./Brand.svg";
 import Braum from "./Braum.svg";
@@ -180,7 +180,7 @@ const championsIcons = {
   AurelionSol,
   Azir,
   Bard,
-  BelVeth,
+  Belveth,
   Blitzcrank,
   Brand,
   Braum,

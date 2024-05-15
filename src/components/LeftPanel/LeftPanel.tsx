@@ -21,7 +21,7 @@ function LeftPanel({
   };
 
   return (
-    <div className={cls["left-panel"]}>
+    <div className={`${cls["left-panel"]} left-panel`}>
       <h1 className={cls["main-title"]}>Check your teammate</h1>
       <div className={cls["input-container"]}>
         <input
