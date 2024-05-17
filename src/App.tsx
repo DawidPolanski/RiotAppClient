@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import RightPanel from "./components/RightPanel/RightPanel";
 import LeftPanel from "./components/LeftPanel/LeftPanel";
 import debounce from "lodash/debounce";
+import chevronLeft from "./assets/icons/chevron-left.svg";
+import chevronRight from "./assets/icons/chevron-right.svg";
+import { MagneticElementsController } from "@toon.rombaut/magnetic-elements";
 
 function App() {
   const [summonerName, setSummonerName] = useState("");
@@ -15,13 +18,35 @@ function App() {
   const [opponentLeagueData, setOpponentLeagueData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showRightPanel, setShowRightPanel] = useState(false);
+  const magneticElementsControllerRef = useRef(null);
+
+  useEffect(() => {
+    const controller = new MagneticElementsController({
+      triggerArea: 200,
+      interpolationFactor: 0.8,
+      magneticForce: 0.3,
+    });
+    magneticElementsControllerRef.current = controller;
+
+    return () => {
+      if (magneticElementsControllerRef.current) {
+        magneticElementsControllerRef.current.destroy();
+      }
+    };
+  }, []);
 
   const handleSummonerInputChange = (event) => {
     setSummonerName(event.target.value);
   };
+
   const handleClosePanel = () => {
     setShowRightPanel(false);
   };
+
+  const handleOpenPanel = () => {
+    setShowRightPanel(true);
+  };
+
   const handleOpponentInputChange = (event) => {
     setOpponentName(event.target.value);
   };
@@ -69,6 +94,23 @@ function App() {
         handleOpponentInputChange={handleOpponentInputChange}
         fetchDataAndMatches={delayedFetchDataAndMatches}
       />
+      {showRightPanel ? (
+        <button
+          className="chevron-button chevron-left"
+          onClick={handleClosePanel}
+          magnetic-element="true"
+        >
+          <img src={chevronLeft} alt="Close" />
+        </button>
+      ) : (
+        <button
+          className="chevron-button chevron-right"
+          onClick={handleOpenPanel}
+          magnetic-element="true"
+        >
+          <img src={chevronRight} alt="Open" />
+        </button>
+      )}
       {loading ? (
         <div className="loading-spinner"></div>
       ) : (
@@ -79,7 +121,6 @@ function App() {
           commonMatches={commonMatches}
           specificMatch={specificMatch}
           opponentLeagueData={opponentLeagueData}
-          onClosePanel={handleClosePanel}
         />
       )}
     </div>

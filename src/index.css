@@ -122,6 +122,8 @@ button:focus-visible {
   height: 100vh;
   overflow: hidden;
   transition: transform 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
 .left-panel {
@@ -137,8 +139,14 @@ button:focus-visible {
   width: 100%;
   height: 100%;
   transition: right 0.3s ease-in-out;
+  overflow-x: hidden;
 }
-
+.right-panel::after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+}
 .show-right-panel .right-panel {
   right: 0;
 }
@@ -159,4 +167,29 @@ button:focus-visible {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
+}
+
+.chevron-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+.chevron-button img {
+  width: 30px;
+  height: 30px;
+  filter: invert(1);
+}
+
+.chevron-left {
+  left: 0;
+}
+
+.chevron-right {
+  right: 0;
 }
