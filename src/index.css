@@ -19,6 +19,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 .overlay {
   position: fixed;
   top: 0;
@@ -28,6 +29,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
 }
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -63,11 +65,6 @@ button {
 
 button:hover {
   border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 .poppins-thin {
@@ -141,12 +138,14 @@ button:focus-visible {
   transition: right 0.3s ease-in-out;
   overflow-x: hidden;
 }
+
 .right-panel::after {
   content: "";
   display: block;
   height: 0;
   clear: both;
 }
+
 .show-right-panel .right-panel {
   right: 0;
 }
@@ -178,6 +177,9 @@ button:focus-visible {
   cursor: pointer;
   padding: 0;
   z-index: 1001;
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+  will-change: transform;
 }
 
 .chevron-button img {
@@ -192,4 +194,7 @@ button:focus-visible {
 
 .chevron-right {
   right: 0;
+}
+.chevron-button:hover {
+  transform: translateY(-50%) scale(1.4);
 }

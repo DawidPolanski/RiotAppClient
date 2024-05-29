@@ -12,9 +12,9 @@
   .main-title {
     font-weight: 300;
     font-size: -webkit-xxx-large;
-    padding-top: 200px;
+    margin-top: 200px;
+    background-color: #535bf2;
   }
-
   .button-container {
     button {
       position: relative;
@@ -54,6 +54,11 @@
     align-items: flex-start;
     margin-top: 30px;
     font-weight: 400 !important;
+
+    input {
+      outline: none;
+      outline-offset: none;
+    }
 
     .icon {
       width: 20px;

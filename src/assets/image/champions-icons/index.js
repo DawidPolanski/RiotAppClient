@@ -100,7 +100,7 @@ import Qiyana from "./Qiyana.svg";
 import Quinn from "./Quinn.svg";
 import Rakan from "./Rakan.svg";
 import Rammus from "./Rammus.svg";
-import Reksai from "./Reksai.svg";
+import RekSai from "./RekSai.svg";
 import Rell from "./Rell.svg";
 import Renata from "./Renata.svg";
 import Renekton from "./Renekton.svg";
@@ -269,7 +269,7 @@ const championsIcons = {
   Quinn,
   Rakan,
   Rammus,
-  Reksai,
+  RekSai,
   Rell,
   Renata,
   Renekton,
