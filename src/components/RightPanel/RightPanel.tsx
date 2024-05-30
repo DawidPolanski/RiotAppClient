@@ -22,6 +22,7 @@ const RightPanel = ({
   const [totalMatchesWithOpponent, setTotalMatchesWithOpponent] = useState<
     number | null
   >(null);
+  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   const handleValueChange = (
     winsRatioAgainstOpponent,
@@ -42,7 +43,13 @@ const RightPanel = ({
       let totalMatchesAgainstOpponent = 0;
       let totalMatchesWithOpponent = 0;
 
-      specificMatch.forEach((match) => {
+      const dates = specificMatch.map((match) =>
+        new Date(match.info.gameStartTimestamp).toLocaleDateString()
+      );
+      const winsAgainstData = [];
+      const winsWithData = [];
+
+      specificMatch.forEach((match, index) => {
         if (
           match.info &&
           match.info.participants &&
@@ -63,11 +70,13 @@ const RightPanel = ({
 
             if (summonerTeamId === opponentTeamId) {
               totalMatchesWithOpponent++;
+              winsWithData.push(playerResult ? 1 : 0);
               if (playerResult) {
                 totalWinsWithOpponent++;
               }
             } else {
               totalMatchesAgainstOpponent++;
+              winsAgainstData.push(playerResult ? 1 : 0);
               if (playerResult) {
                 totalWinsForSummoner++;
               }
@@ -75,12 +84,11 @@ const RightPanel = ({
           }
         }
       });
-      console.log("opponentLeagueData", opponentLeagueData);
+
       const winsRatioAgainstOpponent =
         totalMatchesAgainstOpponent > 0
           ? (totalWinsForSummoner / totalMatchesAgainstOpponent) * 100
           : 0;
-
       const winsRatioWithOpponent =
         totalMatchesWithOpponent > 0
           ? (totalWinsWithOpponent / totalMatchesWithOpponent) * 100

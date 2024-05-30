@@ -1,10 +1,23 @@
-$summoner-color: #e3cd08;
-$opponent-color: #36ae42;
-
 .match-data-panel {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
+
+  .matches-container {
+    flex-basis: calc(50% - 20px);
+    max-width: calc(50% - 20px);
+    margin-right: 20px;
+    max-height: 100%;
+    scroll-behavior: smooth;
+    overflow: auto;
+    padding: 10px; /* Dodaj padding, aby dodać przerwę wewnętrzną */
+    margin-left: 10px; /* Dodaj margin-left, aby dodać przerwę zewnętrzną */
+  }
+
+  .chart-container {
+    flex-basis: calc(50% - 20px);
+    max-width: calc(50% - 20px);
+  }
 
   .specific-match {
     background-color: #2d2d2d;
@@ -14,11 +27,13 @@ $opponent-color: #36ae42;
     justify-content: space-between;
     border-radius: 30px;
     padding: 10px;
+
     .champion-icon {
       height: 70px;
       width: 70px;
       border-radius: 100%;
     }
+
     .players-container {
       display: flex;
       flex-wrap: wrap;
@@ -31,15 +46,18 @@ $opponent-color: #36ae42;
       }
     }
   }
+
   .centered {
     display: flex;
     align-items: center;
     justify-content: center;
   }
+
   .opponent-info {
     display: flex;
     align-items: center;
     justify-content: center;
+
     p {
       font-size: x-large;
     }
@@ -56,7 +74,6 @@ $opponent-color: #36ae42;
     max-width: 380px;
     display: grid;
     padding-left: 1rem;
-    align-items: center;
     align-items: center;
   }
 
@@ -82,19 +99,21 @@ $opponent-color: #36ae42;
       align-items: center;
       padding: 4px 8px;
       width: 210px;
+
       img {
         margin-right: 8px;
       }
 
       .summoner-name-summoner {
-        color: $summoner-color;
+        color: #e3cd08;
       }
 
       .summoner-name-opponent {
-        color: $opponent-color;
+        color: #36ae42;
       }
     }
   }
+
   .card {
     background-color: #2d2d2d;
     padding: 20px;

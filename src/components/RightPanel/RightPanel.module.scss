@@ -4,7 +4,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   padding: 50px;
 
   .data-section {
@@ -32,33 +32,41 @@
     font-size: 25px;
     margin-bottom: 5px;
   }
+
   .tier-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
+
   .tier-content img {
     width: 150px;
     height: 150px;
     margin-bottom: 5px;
   }
+
   .tier-info {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .field-value {
     color: #ccc;
   }
+
   .tier-info img {
     width: 130px;
     height: 130px;
   }
+
   .scroll-container {
     flex-grow: 1;
-    overflow-y: none;
+    overflow-y: auto;
     padding: 20px;
-    width: 95vh;
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 }
