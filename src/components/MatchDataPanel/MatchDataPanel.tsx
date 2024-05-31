@@ -37,9 +37,13 @@ const MatchDataPanel = ({
   useEffect(() => {
     if (specificMatch && summonerData && opponentData && commonMatches) {
       let totalWinsForSummoner = 0;
-      let totalMatchesAgainstOpponent = [];
-      let totalMatchesWithOpponent = [];
+      let totalMatches = 0;
+      let totalWinsAgainstOpponent = 0;
+      let totalWinsWithOpponent = 0;
+      let totalMatchesAgainstOpponent = 0;
+      let totalMatchesWithOpponent = 0;
       let dates = [];
+      let winPercentages = [];
       let winsAgainstData = [];
       let winsWithData = [];
 
@@ -57,67 +61,78 @@ const MatchDataPanel = ({
             (participant) =>
               participant.riotIdGameName === opponentData.gameName
           );
+
           if (player && opponent) {
+            totalMatches++;
+            if (player.win) {
+              totalWinsForSummoner++;
+            }
+
             const summonerTeamId = player.teamId;
             const opponentTeamId = opponent.teamId;
 
             if (summonerTeamId === opponentTeamId) {
-              totalMatchesWithOpponent.push(match);
+              totalMatchesWithOpponent++;
               if (player.win) {
-                totalWinsForSummoner++;
+                totalWinsWithOpponent++;
               }
             } else {
-              totalMatchesAgainstOpponent.push(match);
+              totalMatchesAgainstOpponent++;
               if (player.win) {
-                totalWinsForSummoner++;
+                totalWinsAgainstOpponent++;
               }
             }
 
             const gameStartDate = new Date(match.info.gameStartTimestamp);
             dates.push(gameStartDate.toLocaleDateString());
-
+            winPercentages.push((totalWinsForSummoner / totalMatches) * 100);
             winsAgainstData.push(
-              summonerTeamId !== opponentTeamId && player.win ? 1 : 0
+              totalMatchesAgainstOpponent > 0
+                ? (totalWinsAgainstOpponent / totalMatchesAgainstOpponent) * 100
+                : 0
             );
             winsWithData.push(
-              summonerTeamId === opponentTeamId && player.win ? 1 : 0
+              totalMatchesWithOpponent > 0
+                ? (totalWinsWithOpponent / totalMatchesWithOpponent) * 100
+                : 0
             );
           }
         }
       });
 
-      const winsRatioAgainstOpponent =
-        totalMatchesAgainstOpponent.length > 0
-          ? (totalWinsForSummoner / totalMatchesAgainstOpponent.length) * 100
-          : 0;
-      const winsRatioWithOpponent =
-        totalMatchesWithOpponent.length > 0
-          ? (totalWinsForSummoner / totalMatchesWithOpponent.length) * 100
-          : 0;
-
       onValueChange(
-        winsRatioAgainstOpponent,
-        winsRatioWithOpponent,
-        totalMatchesWithOpponent.length,
-        totalMatchesAgainstOpponent.length
+        winPercentages[winPercentages.length - 1] || 0,
+        winsWithData[winsWithData.length - 1] || 0,
+        totalMatchesWithOpponent,
+        totalMatchesAgainstOpponent
       );
 
       setChartData({
         labels: dates,
         datasets: [
           {
+            label: "Win Percentage Over Time",
+            data: winPercentages,
+            borderColor: "rgba(54, 162, 235, 1)",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            fill: true,
+            yAxisID: "y",
+          },
+          {
             label: "Wins Against Opponent",
             data: winsAgainstData,
             borderColor: "rgba(255, 99, 132, 1)",
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             fill: true,
+            yAxisID: "y1",
           },
           {
             label: "Wins With Opponent",
             data: winsWithData,
-            borderColor: "rgba(54, 162, 235, 1)",
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
             fill: true,
+            yAxisID: "y1",
           },
         ],
       });
@@ -265,7 +280,46 @@ const MatchDataPanel = ({
           })}
       </div>
       <div className={cls["chart-container"]}>
-        {chartData && <Line data={chartData} />}
+        {chartData && (
+          <Line
+            data={chartData}
+            options={{
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function (value) {
+                      return value + "%";
+                    },
+                  },
+                  title: {
+                    display: true,
+                    text: "Win Percentage",
+                  },
+                },
+                y1: {
+                  beginAtZero: true,
+                  position: "right",
+                  ticks: {
+                    callback: function (value) {
+                      return value + "%";
+                    },
+                  },
+                  title: {
+                    display: true,
+                    text: "Win Percentage Against/With Opponent",
+                  },
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: "Time",
+                  },
+                },
+              },
+            }}
+          />
+        )}
       </div>
     </div>
   );
