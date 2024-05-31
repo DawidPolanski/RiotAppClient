@@ -100,19 +100,31 @@ const MatchDataPanel = ({
         }
       });
 
+      const sortedData = dates
+        .map((date, index) => ({
+          date,
+          winPercentage: winPercentages[index],
+          winsAgainst: winsAgainstData[index],
+          winsWith: winsWithData[index],
+        }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      const sortedWinPercentages = sortedData.map((data) => data.winPercentage);
+      const sortedWinsWithData = sortedData.map((data) => data.winsWith);
+
       onValueChange(
-        winPercentages[winPercentages.length - 1] || 0,
-        winsWithData[winsWithData.length - 1] || 0,
+        sortedWinPercentages[sortedWinPercentages.length - 1] || 0,
+        sortedWinsWithData[sortedWinsWithData.length - 1] || 0,
         totalMatchesWithOpponent,
         totalMatchesAgainstOpponent
       );
 
       setChartData({
-        labels: dates,
+        labels: sortedData.map((data) => data.date).reverse(),
         datasets: [
           {
-            label: "Win Percentage Over Time",
-            data: winPercentages,
+            label: "Win With Opponent",
+            data: sortedData.map((data) => data.winPercentage),
             borderColor: "rgba(54, 162, 235, 1)",
             backgroundColor: "rgba(54, 162, 235, 0.2)",
             fill: true,
@@ -120,19 +132,11 @@ const MatchDataPanel = ({
           },
           {
             label: "Wins Against Opponent",
-            data: winsAgainstData,
+            data: sortedData.map((data) => data.winsAgainst),
             borderColor: "rgba(255, 99, 132, 1)",
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             fill: true,
-            yAxisID: "y1",
-          },
-          {
-            label: "Wins With Opponent",
-            data: winsWithData,
-            borderColor: "rgba(75, 192, 192, 1)",
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            fill: true,
-            yAxisID: "y1",
+            yAxisID: "y",
           },
         ],
       });
@@ -262,15 +266,10 @@ const MatchDataPanel = ({
                             : participant.riotIdGameName ===
                               opponentData?.gameName
                             ? cls["summoner-name-opponent"]
-                            : ""
+                            : cls["summoner-name"]
                         }
                       >
-                        {participant.riotIdGameName === summonerData?.gameName
-                          ? summonerData?.gameName
-                          : participant.riotIdGameName ===
-                            opponentData?.gameName
-                          ? opponentData?.gameName
-                          : participant.riotIdGameName}
+                        {participant.riotIdGameName}
                       </span>
                     </div>
                   ))}
@@ -284,30 +283,23 @@ const MatchDataPanel = ({
           <Line
             data={chartData}
             options={{
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: "top",
+                },
+                title: {
+                  display: true,
+                  text: "Win Percentage Over Time",
+                },
+              },
               scales: {
                 y: {
+                  min: 0,
                   beginAtZero: true,
-                  ticks: {
-                    callback: function (value) {
-                      return value + "%";
-                    },
-                  },
                   title: {
                     display: true,
                     text: "Win Percentage",
-                  },
-                },
-                y1: {
-                  beginAtZero: true,
-                  position: "right",
-                  ticks: {
-                    callback: function (value) {
-                      return value + "%";
-                    },
-                  },
-                  title: {
-                    display: true,
-                    text: "Win Percentage Against/With Opponent",
                   },
                 },
                 x: {
