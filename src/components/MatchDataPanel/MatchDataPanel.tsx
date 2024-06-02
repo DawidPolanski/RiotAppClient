@@ -47,7 +47,8 @@ const MatchDataPanel = ({
       let winsAgainstData = [];
       let winsWithData = [];
 
-      specificMatch.forEach((match, index) => {
+      for (let i = specificMatch.length - 1; i >= 0; i--) {
+        const match = specificMatch[i];
         if (
           match.info &&
           match.info.participants &&
@@ -98,7 +99,7 @@ const MatchDataPanel = ({
             );
           }
         }
-      });
+      }
 
       const sortedData = dates
         .map((date, index) => ({
@@ -120,7 +121,7 @@ const MatchDataPanel = ({
       );
 
       setChartData({
-        labels: sortedData.map((data) => data.date).reverse(),
+        labels: sortedData.map((data) => data.date),
         datasets: [
           {
             label: "Win With Opponent",
