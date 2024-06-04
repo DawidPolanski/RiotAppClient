@@ -15,6 +15,7 @@
     margin-top: 200px;
     background-color: #535bf2;
   }
+
   .button-container {
     button {
       position: relative;
@@ -51,10 +52,10 @@
     padding-top: 120px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     margin-top: 30px;
     font-weight: 400 !important;
-    align-items: center;
+
     input {
       outline: none;
       outline-offset: none;
@@ -66,10 +67,45 @@
       margin-left: 5px;
       vertical-align: middle;
     }
+
     select {
+      width: 473px;
+      height: 53px;
+      border-radius: 8px;
+      padding: 10px;
       margin-bottom: 30px;
+      background-color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.8) !important;
+      border: none;
       cursor: pointer;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      &:focus {
+        border: 2px solid #4aa6fb;
+        box-shadow: 0 0 10px rgba(74, 166, 251, 0.5);
+        outline: none;
+      }
+
+      option {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #000;
+      }
     }
+
+    &.show-select {
+      select {
+        opacity: 1;
+        max-height: 100px;
+      }
+    }
+
     input {
       border-radius: 8px;
       width: 473px;
@@ -77,8 +113,9 @@
       padding: 10px;
       margin-bottom: 30px;
       border: none;
-      background-color: rgb(255 255 255 / 30%);
-      color: rgb(255 255 255 / 80%) !important;
+      background-color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.8) !important;
+
       &::placeholder {
         color: rgba(255, 255, 255, 0.6);
       }

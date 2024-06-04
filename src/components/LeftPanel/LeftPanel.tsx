@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import cls from "./LeftPanel.module.scss";
 import regions from "../../shared/regionList";
 
@@ -11,6 +11,7 @@ function LeftPanel({
 }) {
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(regions[0].value);
+  const [showSelect, setShowSelect] = useState(false);
 
   const handleClick = () => {
     if (!isButtonDisabled) {
@@ -26,10 +27,18 @@ function LeftPanel({
     setSelectedRegion(event.target.value);
   };
 
+  useEffect(() => {
+    setShowSelect(true);
+  }, []);
+
   return (
     <div className={`${cls["left-panel"]} left-panel`}>
       <h1 className={cls["main-title"]}>Check your teammate</h1>
-      <div className={cls["input-container"]}>
+      <div
+        className={`${cls["input-container"]} ${
+          showSelect ? cls["show-select"] : ""
+        }`}
+      >
         <input
           className="summoner-input"
           type="text"
@@ -45,7 +54,7 @@ function LeftPanel({
           placeholder="Enter your teammate's nickname"
         />
         <select
-          className="region-select"
+          className={`${cls["region-select"]} region-select`}
           value={selectedRegion}
           onChange={handleRegionChange}
         >
