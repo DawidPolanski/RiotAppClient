@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import RightPanel from "./components/RightPanel/RightPanel";
 import LeftPanel from "./components/LeftPanel/LeftPanel";
@@ -36,7 +36,7 @@ function App() {
 
   const delayedFetchDataAndMatches = debounce(fetchDataAndMatches, 50);
 
-  async function fetchDataAndMatches() {
+  async function fetchDataAndMatches(region) {
     try {
       setLoading(true);
       const [summonerGameName, summonerTagLine] = summonerName.split("#");
@@ -46,7 +46,7 @@ function App() {
       const encodedOpponentTagLine = encodeURIComponent(opponentTagLine);
 
       const response = await axios.get(
-        `http://localhost:3001/summonerAndMatchData/${summonerGameName}/${encodedSummonerTagLine}/${opponentGameName}/${encodedOpponentTagLine}`
+        `http://localhost:3001/summonerAndMatchData/${summonerGameName}/${encodedSummonerTagLine}/${opponentGameName}/${encodedOpponentTagLine}?region=${region}`
       );
 
       const responseData = response.data;

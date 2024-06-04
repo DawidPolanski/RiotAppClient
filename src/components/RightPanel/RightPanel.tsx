@@ -43,9 +43,6 @@ const RightPanel = ({
       let totalMatchesAgainstOpponent = 0;
       let totalMatchesWithOpponent = 0;
 
-      const dates = specificMatch.map((match) =>
-        new Date(match.info.gameStartTimestamp).toLocaleDateString()
-      );
       const winsAgainstData = [];
       const winsWithData = [];
 

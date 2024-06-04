@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import cls from "./LeftPanel.module.scss";
+import regions from "../../shared/regionList";
 
 function LeftPanel({
   summonerName,
@@ -9,15 +10,20 @@ function LeftPanel({
   fetchDataAndMatches,
 }) {
   const [isButtonDisabled, setButtonDisabled] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState(regions[0].value);
 
   const handleClick = () => {
     if (!isButtonDisabled) {
       setButtonDisabled(true);
-      fetchDataAndMatches();
+      fetchDataAndMatches(selectedRegion);
       setTimeout(() => {
         setButtonDisabled(false);
       }, 2000);
     }
+  };
+
+  const handleRegionChange = (event) => {
+    setSelectedRegion(event.target.value);
   };
 
   return (
@@ -38,6 +44,17 @@ function LeftPanel({
           onChange={handleOpponentInputChange}
           placeholder="Enter your teammate's nickname"
         />
+        <select
+          className="region-select"
+          value={selectedRegion}
+          onChange={handleRegionChange}
+        >
+          {regions.map((region) => (
+            <option key={region.value} value={region.value}>
+              {region.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className={cls["button-container"]}>
         <button
