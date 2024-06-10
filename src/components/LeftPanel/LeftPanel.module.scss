@@ -17,7 +17,7 @@
   }
 
   .button-container {
-    button {
+    .button-primary {
       position: relative;
       width: 473px;
       height: 53px;
@@ -28,24 +28,34 @@
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s, transform 0.3s, font-size 0.3s;
 
       &:hover:not(:disabled) {
         background-color: #535bf2;
+        transform: scale(1.05);
+
+        span {
+          font-size: 18px;
+        }
+
+        .icon {
+          transform: scale(1.2);
+        }
       }
 
       &:disabled {
         cursor: not-allowed;
         background-color: #a0a0a0;
       }
-    }
-  }
 
-  .icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    padding-left: 10px;
+      .icon {
+        margin-left: 10px;
+        transition: transform 0.3s;
+      }
+    }
   }
 
   .input-container {

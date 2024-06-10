@@ -161,7 +161,16 @@ const MatchDataPanel = ({
             const gameStartDate = new Date(gameStartTimestamp);
             const timeDifference =
               currentDate.getTime() - gameStartDate.getTime();
+            const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
             const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+            let timeAgo;
+            if (hoursAgo < 24) {
+              timeAgo = hoursAgo === 1 ? "1 hour ago" : `${hoursAgo} hours ago`;
+            } else {
+              timeAgo = daysAgo === 1 ? "1 day ago" : `${daysAgo} days ago`;
+            }
+
             const queueType =
               queueDescriptions[match.info.queueId] || "Unknown Queue";
             const opponentChampionName = match.info.participants
@@ -216,7 +225,7 @@ const MatchDataPanel = ({
                 <div className={cls["game-data"]}>
                   <p className={cls["queue-type"]}>{queueType}</p>
                   <p className={cls["game-duration"]}>
-                    <strong> {daysAgo} Days ago</strong>
+                    <strong> {timeAgo}</strong>
                   </p>
                   {playerResult !== undefined && (
                     <p
@@ -302,11 +311,19 @@ const MatchDataPanel = ({
                     display: true,
                     text: "Win Percentage",
                   },
+                  grid: {
+                    color: "rgba(53, 54, 59, 0.2)",
+                    lineWidth: 1.5,
+                  },
                 },
                 x: {
                   title: {
                     display: true,
                     text: "Time",
+                  },
+                  grid: {
+                    color: "rgba(53, 54, 59, 0.2)",
+                    lineWidth: 1.5,
                   },
                 },
               },
